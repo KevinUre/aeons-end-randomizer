@@ -1,6 +1,8 @@
 # Breach Market
 
-A zero-build, rule-driven market randomizer for **Aeon's End Second Edition**. It includes the market cards from:
+A zero-build, rule-driven market randomizer for **Aeon's End**. The embedded catalog currently contains 499 unique randomizable supply cards across 29 official set labels, including campaign content and promos.
+
+The original collection remains the default selection:
 
 - Aeon's End (core set)
 - The Depths
@@ -8,7 +10,7 @@ A zero-build, rule-driven market randomizer for **Aeon's End Second Edition**. I
 - The Void
 - War Eternal
 
-The page is plain HTML, CSS, and JavaScript. There are no dependencies, network requests, cookies, or build step.
+Open the collapsed **Drawing from** panel to choose any combination of sets. The set selection and market definition are saved to local storage after a market is generated and restored on that device the next time the page loads.
 
 ## Rule language
 
@@ -20,11 +22,13 @@ gem <4, gem =4, gem any, relic any, relic any, spell <5, spell <=5, spell >=5, s
 
 Card types are `gem`, `relic`, and `spell`. Cost tests are `<`, `<=`, `=`, `>=`, `>`, and `any`. Rules are case-insensitive and may also be separated by line breaks.
 
-The generator uses randomized bipartite matching, so overlapping rules still produce a unique market whenever a valid one exists. A card rerolled in place continues to follow the rule for its slot and cannot duplicate another market card.
+The generator uses randomized bipartite matching, so overlapping rules still produce a unique market whenever a valid one exists. A card rerolled in place continues to follow the rule for its slot, stays inside the selected set pool, and cannot duplicate another market card.
+
+Hover a card name with a mouse, focus it with a keyboard, or tap it on a phone to display the printed card effect.
 
 ## Run locally
 
-Open `index.html` directly, or serve this directory with any static file server.
+Open `index.html` directly, or serve this directory with any static file server. The page is plain HTML, CSS, and JavaScript with no runtime dependencies or network requests.
 
 Run the dependency-free test suite with:
 
@@ -34,10 +38,16 @@ npm test
 
 ## Publish on GitHub Pages
 
-Push the repository to GitHub, then open **Settings → Pages**. Under **Build and deployment**, choose **Deploy from a branch**, select the repository's main branch and `/ (root)`, and save.
+Push the repository to GitHub, then open **Settings -> Pages**. Under **Build and deployment**, choose **Deploy from a branch**, select the repository's main branch and `/ (root)`, and save.
 
 ## Card data
 
-The embedded dataset contains only names, types, costs, and set names for the 81 owned market cards. It was assembled from the open-source [`aer-data`](https://github.com/on3iro/aeons-end-randomizer) dataset and cross-checked against the [Aeon's End Wiki card list](https://aeonsend.wiki.gg/wiki/Card_List).
+The embedded dataset includes each card's name, type, cost, applicable set labels, printed effect, and source URL. It is generated from public `PlayerCard` templates on the [Aeon's End Wiki](https://aeonsend.wiki.gg/wiki/Card_List).
 
-This is an unofficial fan project. Aeon's End and its card names are property of their respective owners.
+Refresh the catalog with:
+
+```sh
+node scripts/import-wiki-cards.js --write
+```
+
+Wiki-derived card data is provided under the Wiki's [CC BY-SA 4.0 license](https://creativecommons.org/licenses/by-sa/4.0/). Application code is MIT-licensed. This is an unofficial fan project; Aeon's End and its card names are property of their respective owners.

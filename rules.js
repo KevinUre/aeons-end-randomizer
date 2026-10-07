@@ -38,9 +38,6 @@
       throw new RuleError("There is an empty rule. Remove the extra comma or line break.");
     }
 
-    if (pieces.length > 81) {
-      throw new RuleError("This collection contains only 81 unique market cards.");
-    }
 
     return pieces.map((piece, index) => {
       const match = piece.match(/^(gem|relic|spell)\s+(any|(?:<=|>=|==|=|<|>)\s*\d+)$/i);

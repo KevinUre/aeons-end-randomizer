@@ -5,7 +5,7 @@
   "description": "A rule-driven Aeon's End Second Edition market randomizer.",
   "scripts": {
     "test": "node --test",
-    "check": "node --check cards.js && node --check rules.js && node --check app.js"
+    "check": "node --check cards.js && node --check rules.js && node --check app.js && node --check scripts/import-wiki-cards.js"
   },
   "license": "MIT"
 }

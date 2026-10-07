@@ -13,24 +13,55 @@ const {
 
 const DEFAULT_RULES =
   "gem <4, gem =4, gem any, relic any, relic any, spell <5, spell <=5, spell >=5, spell >5";
+const DEFAULT_SETS = new Set([
+  "Aeon's End (Core Box)",
+  "The Depths",
+  "The Outer Dark",
+  "The Void",
+  "War Eternal",
+]);
+const ownedCards = cards.filter((card) =>
+  card.sets.some((set) => DEFAULT_SETS.has(set)),
+);
 
-test("the owned collection contains all 81 market cards", () => {
-  assert.equal(cards.length, 81);
+test("the Wiki catalog contains 499 complete, unique supply cards", () => {
+  assert.equal(cards.length, 499);
+  assert.equal(new Set(cards.map((card) => card.id)).size, cards.length);
+  assert.equal(new Set(cards.map((card) => card.name)).size, cards.length);
+  assert.equal(new Set(cards.flatMap((card) => card.sets)).size, 29);
+
+  cards.forEach((card) => {
+    assert.ok(["gem", "relic", "spell"].includes(card.type));
+    assert.ok(Number.isInteger(card.cost) && card.cost > 0);
+    assert.ok(card.effect.length > 0);
+    assert.ok(card.sets.length > 0);
+    assert.match(card.wiki, /^https:\/\/aeonsend\.wiki\.gg\/wiki\//);
+  });
+});
+
+test("the default five owned sets still contain exactly 81 cards", () => {
+  assert.equal(ownedCards.length, 81);
   assert.deepEqual(
     Object.fromEntries(
-      [...new Set(cards.map((card) => card.set))].map((set) => [
+      [...DEFAULT_SETS].map((set) => [
         set,
-        cards.filter((card) => card.set === set).length,
+        cards.filter((card) => card.sets.includes(set)).length,
       ]),
     ),
     {
-      "Aeon's End": 27,
+      "Aeon's End (Core Box)": 27,
       "The Depths": 8,
       "The Outer Dark": 11,
       "The Void": 8,
       "War Eternal": 27,
     },
   );
+});
+
+test("imports printed card effects from Wiki templates", () => {
+  const jade = cards.find((card) => card.name === "Jade");
+  assert.equal(jade.effect, "Gain 2 Æ.");
+  assert.deepEqual(jade.sets, ["Aeon's End (Core Box)"]);
 });
 
 test("parses case-insensitive rules and normalizes equality", () => {
@@ -61,11 +92,11 @@ test("matches every supported comparison", () => {
   }
 });
 
-test("default market always has nine unique cards satisfying their rules", () => {
+test("default market always has nine unique owned cards satisfying their rules", () => {
   const rules = parseRules(DEFAULT_RULES);
 
   for (let iteration = 0; iteration < 100; iteration += 1) {
-    const market = generateMarket(rules, cards);
+    const market = generateMarket(rules, ownedCards);
     assert.equal(market.length, 9);
     assert.equal(new Set(market.map((card) => card.id)).size, 9);
     market.forEach((card, index) => assert.ok(matchesRule(card, rules[index])));
@@ -86,17 +117,20 @@ test("matching solver preserves narrow slots when broad rules overlap", () => {
 
 test("rejects markets that cannot be unique", () => {
   const rules = parseRules("gem =2, gem =2");
-  const jadeOnly = cards.filter((card) => card.type === "gem" && card.cost === 2);
+  const jadeOnly = ownedCards.filter(
+    (card) => card.type === "gem" && card.cost === 2,
+  );
   assert.throws(() => generateMarket(rules, jadeOnly), MarketError);
 });
 
-test("reroll keeps the rule and market-wide uniqueness", () => {
+test("reroll keeps the rule, selected pool, and market-wide uniqueness", () => {
   const rules = parseRules(DEFAULT_RULES);
-  const market = generateMarket(rules, cards);
+  const market = generateMarket(rules, ownedCards);
   const oldCard = market[0];
-  const replacement = rerollSlot(0, market, rules, cards);
+  const replacement = rerollSlot(0, market, rules, ownedCards);
 
   assert.notEqual(replacement.id, oldCard.id);
   assert.ok(matchesRule(replacement, rules[0]));
+  assert.ok(ownedCards.includes(replacement));
   assert.ok(!market.slice(1).some((card) => card.id === replacement.id));
 });
