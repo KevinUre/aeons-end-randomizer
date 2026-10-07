@@ -876,3 +876,6 @@ footer a:hover {
   .market-section { padding-top: 64px; }
   .effect-popover, .market-card:nth-child(2n) .effect-popover, .market-card:nth-child(3n) .effect-popover { position: fixed; top: auto; right: 12px; bottom: 12px; left: 12px; width: auto; max-height: min(65vh, 470px); }
 }
+
+.market-card::after { clip-path: inset(46px 46px 0 0); }
+.market-card:hover, .market-card:focus-within, .market-card.effect-open { z-index: 20; }
