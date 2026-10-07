@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A rule-driven market randomizer for Aeon's End Second Edition."
+    />
+    <meta name="theme-color" content="#15191d" />
+    <title>Breach Market — Aeon's End Market Randomizer</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="cards.js" defer></script>
+    <script src="rules.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="site-header">
+        <a class="brand" href="#top" aria-label="Breach Market home">
+          <span class="brand-mark" aria-hidden="true">Æ</span>
+          <span>
+            <span class="brand-name">Breach Market</span>
+            <span class="brand-subtitle">Custom supply forge</span>
+          </span>
+        </a>
+        <div class="edition-pill">
+          <span class="edition-dot" aria-hidden="true"></span>
+          Second Edition · 5 boxes
+        </div>
+      </header>
+
+      <main id="top">
+        <section class="hero" aria-labelledby="page-title">
+          <div class="hero-copy">
+            <p class="eyebrow">Build the market you actually want</p>
+            <h1 id="page-title">Your rules.<br /><em>Your market.</em></h1>
+            <p class="hero-intro">
+              Describe each supply pile, separated by commas. The forge draws a
+              unique card for every rule from the collection below.
+            </p>
+          </div>
+
+          <div class="collection-card" aria-label="Included collection">
+            <div class="collection-heading">
+              <span>Drawing from</span>
+              <strong>81 market cards</strong>
+            </div>
+            <ul class="set-list" aria-label="Included sets">
+              <li><span class="set-rune">AE</span>Aeon's End</li>
+              <li><span class="set-rune">D</span>The Depths</li>
+              <li><span class="set-rune">OD</span>The Outer Dark</li>
+              <li><span class="set-rune">V</span>The Void</li>
+              <li><span class="set-rune">WE</span>War Eternal</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="forge" aria-labelledby="forge-title">
+          <div class="forge-main">
+            <div class="section-heading">
+              <div>
+                <p class="step-label">01 / Define</p>
+                <h2 id="forge-title">Market formula</h2>
+              </div>
+              <button class="text-button" id="reset-rules" type="button">
+                Restore default
+              </button>
+            </div>
+
+            <label class="sr-only" for="market-rules">Market rules</label>
+            <textarea
+              id="market-rules"
+              rows="5"
+              spellcheck="false"
+              aria-describedby="rule-hint rule-feedback"
+            >gem &lt;4, gem =4, gem any, relic any, relic any, spell &lt;5, spell &lt;=5, spell &gt;=5, spell &gt;5</textarea
+            >
+            <div class="editor-footer">
+              <p id="rule-feedback" class="rule-feedback" aria-live="polite">
+                9 valid supply rules
+              </p>
+              <p id="rule-hint" class="keyboard-hint">
+                <kbd>Ctrl</kbd> + <kbd>Enter</kbd> to forge
+              </p>
+            </div>
+
+            <button class="primary-button" id="generate-market" type="button">
+              <span>Forge a new market</span>
+              <span class="button-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+
+          <aside class="syntax-card" aria-labelledby="syntax-title">
+            <p class="step-label">Rule language</p>
+            <h2 id="syntax-title">Small on purpose.</h2>
+            <p>
+              Each rule is a card type followed by a cost test. Use
+              <code>any</code> when cost does not matter.
+            </p>
+            <div class="syntax-grid" aria-label="Rule syntax examples">
+              <code>gem &lt;4</code><span>cost below 4</span>
+              <code>relic =5</code><span>cost exactly 5</span>
+              <code>spell &gt;=6</code><span>cost 6 or more</span>
+              <code>gem any</code><span>any gem cost</span>
+            </div>
+            <div class="operators">
+              <span>Types</span>
+              <code>gem</code><code>relic</code><code>spell</code>
+            </div>
+            <div class="operators">
+              <span>Tests</span>
+              <code>&lt;</code><code>&lt;=</code><code>=</code><code>&gt;=</code><code>&gt;</code><code>any</code>
+            </div>
+          </aside>
+        </section>
+
+        <section class="market-section" aria-labelledby="market-title">
+          <div class="section-heading market-heading">
+            <div>
+              <p class="step-label">02 / Play</p>
+              <h2 id="market-title">Your market</h2>
+            </div>
+            <p class="market-note" id="market-note">Every card is unique.</p>
+          </div>
+
+          <div id="market-grid" class="market-grid" aria-live="polite"></div>
+        </section>
+      </main>
+
+      <footer>
+        <p>
+          Unofficial fan tool. Aeon's End and its card names are property of
+          their respective owners.
+        </p>
+        <p>
+          Card facts cross-checked with the
+          <a href="https://aeonsend.wiki.gg/wiki/Card_List">Aeon's End Wiki</a>.
+        </p>
+      </footer>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
