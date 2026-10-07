@@ -879,3 +879,4 @@ footer a:hover {
 
 .market-card::after { clip-path: inset(46px 46px 0 0); }
 .market-card:hover, .market-card:focus-within, .market-card.effect-open { z-index: 20; }
+.market-card.is-rerolled { animation-delay: 0ms; }

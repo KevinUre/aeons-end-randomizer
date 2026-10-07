@@ -277,9 +277,22 @@
 
   function reroll(slot) {
     try {
-      market[slot] = MarketRules.rerollSlot(slot, market, activeRules, activeCards);
-      renderMarket();
-      elements.grid.querySelector(`[data-slot="${slot}"]`)?.focus({ preventScroll: true });
+      const replacement = MarketRules.rerollSlot(
+        slot,
+        market,
+        activeRules,
+        activeCards,
+      );
+      const currentCard = elements.grid.children[slot];
+      const replacementCard = createCard(replacement, activeRules[slot], slot);
+
+      replacementCard.classList.add("is-rerolled");
+      market[slot] = replacement;
+      closeEffects();
+      currentCard.replaceWith(replacementCard);
+      replacementCard
+        .querySelector(".reroll-button")
+        ?.focus({ preventScroll: true });
     } catch (error) {
       showToast(error.message);
     }
